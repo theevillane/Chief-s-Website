@@ -1,0 +1,28 @@
+{
+  "env": {
+    "node":   true,
+    "es2022": true,
+    "jest":   true
+  },
+  "parserOptions": {
+    "ecmaVersion": 2022,
+    "sourceType":  "commonjs"
+  },
+  "rules": {
+    "no-unused-vars":      ["warn", { "argsIgnorePattern": "^_|next" }],
+    "no-console":          "warn",
+    "no-process-exit":     "off",
+    "prefer-const":        "error",
+    "no-var":              "error",
+    "eqeqeq":             ["error", "always"],
+    "handle-callback-err": "error",
+    "no-throw-literal":    "error",
+    "consistent-return":   "warn"
+  },
+  "ignorePatterns": [
+    "node_modules/",
+    "uploads/",
+    "logs/",
+    "coverage/"
+  ]
+}

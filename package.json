@@ -1,0 +1,29 @@
+{
+  "name": "jimo-east-Digital-Services",
+  "version": "1.0.0",
+  "description": "Jimo East Chief Digital Services Portal — Full-Stack Monorepo",
+  "private": true,
+  "scripts": {
+    "install:all":    "npm install && cd backend && npm install && cd ../frontend && npm install",
+    "dev":            "concurrently --kill-others --names \"API,UI\" --prefix-colors \"green.bold,cyan.bold\" \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend":    "cd backend && npm run dev",
+    "dev:frontend":   "cd frontend && npm run dev",
+    "build":          "cd frontend && npm run build",
+    "start":          "concurrently --kill-others --names \"API,UI\" --prefix-colors \"green.bold,cyan.bold\" \"npm run start:backend\" \"npm run start:frontend\"",
+    "start:backend":  "cd backend && npm start",
+    "start:frontend": "cd frontend && npm run preview",
+    "lint":           "cd backend && npm run lint && cd ../frontend && npm run lint",
+    "seed":           "cd backend && node utils/seed.js",
+    "seed:destroy":   "cd backend && node utils/seed.js --destroy",
+    "test":           "cd backend && npm test"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm":  ">=9.0.0"
+  },
+  "author": "RYAN",
+  "license": "MIT"
+}
