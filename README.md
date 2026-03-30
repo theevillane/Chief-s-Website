@@ -51,7 +51,7 @@ npm run seed
 ```
 
 This creates:
-- **Admin**: `0700000001` / `ChiefAdmin@2025`
+- **Admin**: `0700000001` / `ChiefAdmin@2026`
 - **Citizen**: `0712345678` / `Test@1234`
 - 5 announcements, 5 letter requests, 2 disputes, 2 security reports
 
