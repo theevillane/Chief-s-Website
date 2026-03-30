@@ -95,7 +95,7 @@ const generateLetterPDF = (request) => {
         .font('Helvetica')
         .fontSize(9)
         .fillColor(INK_MID)
-        .text('P.O. Box [XXX], Jimo East | Tel: 0700 XXX XXX | jimoeast@ngao.go.ke', { align: 'center' });
+        .text('P.O. Box 34, Pap Onditi | Tel: 0726 299 887  | jimoeast@ngao.go.ke', { align: 'center' });
 
       // ── Divider ───────────────────────────────────────────────────────────────
       y = doc.y + 8;

@@ -31,23 +31,23 @@ const VILLAGES = [
 // ─── Seed Data ────────────────────────────────────────────────────────────────
 
 const ADMIN_USER = {
-  name:      'Chief John Otieno Otieno',
+  name:      'Chief John Otieno',
   id_number: '10000001',
-  phone:     '0700000001',
-  village:   'Kowala',
+  phone:     '0726299887',
+  village:   'Kasaye Central',
   role:      'chief',
-  password:  'ChiefAdmin@2025',
+  password:  'OtienoJohn@2026',
   verified:  true,
   verified_at: new Date(),
 };
 
 const ASST_ADMIN = {
-  name:      'Assistant Chief James Kamau',
+  name:      'Chief Lukas Omollo',
   id_number: '10000002',
   phone:     '0700000002',
-  village:   'Kamula',
+  village:   'Kagaya',
   role:      'assistant_chief',
-  password:  'AsstChief@2025',
+  password:  'OmoloLukas@2026',
   verified:  true,
   verified_at: new Date(),
 };
@@ -107,8 +107,8 @@ const seedDB = async () => {
     // Create admin & assistant
     const adminUser = await User.create(ADMIN_USER);
     const asstUser  = await User.create(ASST_ADMIN);
-    logger.info(`✅ Admin created: ${adminUser.phone} / ChiefAdmin@2025`);
-    logger.info(`✅ Asst Chief created: ${asstUser.phone} / AsstChief@2025`);
+    logger.info(`✅ Admin created: ${adminUser.phone} / OtienoJohn@2026`);
+    logger.info(`✅ Asst Chief created: ${asstUser.phone} / OmoloLukas@2026`);
 
     // Create test citizens
     const citizens = await User.create(TEST_CITIZENS);
@@ -256,8 +256,8 @@ const seedDB = async () => {
     console.log('  ✅  DATABASE SEEDED SUCCESSFULLY');
     console.log('══════════════════════════════════════════════════');
     console.log('\n  ADMIN LOGIN:');
-    console.log('  Phone:    0700000001');
-    console.log('  Password: ChiefAdmin@2025');
+    console.log('  Phone:    0726299887');
+    console.log('  Password: OtienoJohn@2026');
     console.log('\n  TEST CITIZEN LOGIN:');
     console.log('  Phone:    0712345678');
     console.log('  Password: Test@1234');

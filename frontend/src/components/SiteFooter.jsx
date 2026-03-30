@@ -28,7 +28,7 @@ export function SiteFooter({ setPage }) {
           </div>
           <div>
             <div style={{ color:'white',fontWeight:700,fontSize:13,marginBottom:14,textTransform:'uppercase',letterSpacing:'0.06em' }}>Quick Contact</div>
-            {['👤 Chief John Otieno Otieno','📍 Jimo East Location Office','📞 0700 XXX XXX','📧 jimoeast@ngao.go.ke','🕐 Mon–Fri, 8:00 AM – 5:00 PM'].map((c,i)=>(
+            {['👤 Chief John Otieno Otieno','📍 Onyuongo Office','📞 0726 299887','📧 jimoeast@ngao.go.ke','🕐 Mon–Fri, 8:00 AM – 5:00 PM'].map((c,i)=>(
               <div key={i} style={{ display:'flex',alignItems:'flex-start',gap:8,fontSize:12,color:'rgba(255,255,255,0.6)',marginBottom:9,lineHeight:1.4 }}>
                 <span>{c.split(' ')[0]}</span><span>{c.split(' ').slice(1).join(' ')}</span>
               </div>

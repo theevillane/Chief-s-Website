@@ -107,7 +107,7 @@ export function HomePage({ setPage, user }) {
                 </div>
                 <div className="divider"/>
                 <div style={{ display:'flex', gap:12, fontSize:13, color:'var(--ink-light)', flexWrap:'wrap' }}>
-                  <span>📱 0700 XXX XXX</span>
+                  <span>📱 0726 299887</span>
                   <span>📍 Mon–Fri, 8am–5pm</span>
                 </div>
               </div>
