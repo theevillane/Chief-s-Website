@@ -62,10 +62,11 @@ export function SiteFooter({ setPage }) {
             <div style={{ marginTop:2 }}>Powered by Kenya GovTech Initiative · NGAO Digital Services</div>
           </div>
           <div style={{ display:'flex',gap:6,flexWrap:'wrap' }}>
-            {[['🔒','Privacy Policy'],['📋','Terms of Use'],['📞','Contact'],['❓','Help & FAQ']].map(([icon,label])=>(
+            {[['🔒','Privacy Policy','privacy'],['📋','Terms of Use','terms'],['📞','Contact','contact'],['❓','Help & FAQ','help_faq']].map(([icon,label,key])=>(
               <button key={label} style={{ background:'rgba(255,255,255,0.08)',border:'1px solid rgba(255,255,255,0.12)',color:'rgba(255,255,255,0.65)',padding:'6px 14px',borderRadius:6,fontSize:12,cursor:'pointer',fontFamily:"'DM Sans',sans-serif",fontWeight:500 }}
                 onMouseEnter={e=>{e.currentTarget.style.background='rgba(255,255,255,0.15)';e.currentTarget.style.color='white';}}
-                onMouseLeave={e=>{e.currentTarget.style.background='rgba(255,255,255,0.08)';e.currentTarget.style.color='rgba(255,255,255,0.65)';}}>
+                onMouseLeave={e=>{e.currentTarget.style.background='rgba(255,255,255,0.08)';e.currentTarget.style.color='rgba(255,255,255,0.65)';}}
+                onClick={() => setPage(key)}>
                 {icon} {label}
               </button>
             ))}

@@ -1,5 +1,5 @@
 // ─── Topbar.jsx ───────────────────────────────────────────────────────────────
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { notifications as notifApi } from '../services/api';
 import { useApi } from '../hooks/useApi';
@@ -8,10 +8,17 @@ import { timeAgo } from '../utils/formatters';
 export function Topbar({ page, setPage, onLogout }) {
   const { user, isAdmin, isLoggedIn } = useAuth();
   const [notifOpen, setNotifOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
+  const profileRef = useRef(null);
   const { data: notifRaw, execute: fetchNotifs } = useApi(notifApi.list);
 
   const notifs     = notifRaw?.data || [];
-  const unreadCount = notifRaw?.meta?.unread || 0;
+
+  const loadNotifs = async () => {
+    const res = await fetchNotifs();
+    setUnreadCount(res?.meta?.unread || 0);
+  };
 
   const navItems = isLoggedIn
     ? (isAdmin
@@ -22,8 +29,27 @@ export function Topbar({ page, setPage, onLogout }) {
   const handleNotifOpen = () => {
     const next = !notifOpen;
     setNotifOpen(next);
-    if (next) fetchNotifs();
+    if (next) loadNotifs();
   };
+
+  useEffect(() => {
+    loadNotifs();
+    const interval = setInterval(loadNotifs, 60000);
+    window.addEventListener('focus', loadNotifs);
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('focus', loadNotifs);
+    };
+  }, []);
+
+  useEffect(() => {
+    const onDocClick = (e) => {
+      if (!profileRef.current) return;
+      if (!profileRef.current.contains(e.target)) setProfileOpen(false);
+    };
+    document.addEventListener('click', onDocClick);
+    return () => document.removeEventListener('click', onDocClick);
+  }, []);
 
   return (
     <div className="topbar">
@@ -72,9 +98,25 @@ export function Topbar({ page, setPage, onLogout }) {
                 </div>
               )}
             </div>
-            <div style={{ display:'flex', alignItems:'center', gap:8, cursor:'pointer' }}
-              onClick={() => setPage(isAdmin ? 'admin' : 'dashboard')}>
-              <div className="avatar" style={{ background:'rgba(255,255,255,0.2)', color:'white' }}>{user?.name?.[0]}</div>
+            <div ref={profileRef} style={{ position:'relative' }}>
+              <div style={{ display:'flex', alignItems:'center', gap:8, cursor:'pointer' }}
+                onClick={() => setProfileOpen(v => !v)}>
+                <div className="avatar" style={{ background:'rgba(255,255,255,0.2)', color:'white' }}>{user?.name?.[0]}</div>
+              </div>
+              {profileOpen && (
+                <div style={{ position:'absolute', top:'calc(100% + 8px)', right:0, minWidth:190, zIndex:180 }} className="card">
+                  <div className="card-body" style={{ padding:8 }}>
+                    <button className="btn btn-ghost btn-sm" style={{ width:'100%', justifyContent:'flex-start' }}
+                      onClick={() => { setProfileOpen(false); setPage(isAdmin ? 'admin' : 'dashboard'); }}>
+                      📊 Dashboard
+                    </button>
+                    <button className="btn btn-ghost btn-sm" style={{ width:'100%', justifyContent:'flex-start' }}
+                      onClick={() => { setProfileOpen(false); setPage('account'); }}>
+                      ⚙️ Account Settings
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
             <button className="btn btn-ghost btn-sm" style={{ color:'rgba(255,255,255,0.7)', fontSize:12 }} onClick={onLogout}>
               Sign Out

@@ -159,19 +159,44 @@ export function RequestLetterPage({ user, setPage }) {
 
       {step === 3 && (
         <div className="animate-fade">
-          <div className="alert alert-info" style={{ marginBottom:16 }}>
-            <span>📋</span>
-            <div>
-              <strong>Review your request before submitting:</strong>
-              <ul style={{ margin:'8px 0 0 16px', fontSize:13 }}>
-                <li>Type: {LETTER_TYPES.find(l => l.id === selected)?.label}</li>
-                <li>Village: {form.village}</li>
-                <li>Purpose: {form.purpose}</li>
-              </ul>
+          <div style={{ background:'white', maxWidth:600, margin:'0 auto', border:'1px solid var(--border)', borderRadius:'var(--radius)', padding:32, boxShadow:'var(--shadow-md)' }}>
+            <div style={{ borderTop:'3px solid var(--forest)', borderBottom:'3px double var(--forest)', paddingBottom:12, marginBottom:12, display:'flex', justifyContent:'space-between' }}>
+              <div>
+                <div style={{ fontWeight:800, fontSize:15, color:'var(--forest)' }}>REPUBLIC OF KENYA</div>
+                <div style={{ fontSize:13, fontWeight:700 }}>OFFICE OF THE CHIEF</div>
+                <div style={{ fontSize:12, color:'var(--ink-light)' }}>Jimo East Location</div>
+              </div>
+              <div style={{ width:64, height:64, border:'3px solid var(--forest)', borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center', textAlign:'center', fontSize:8, fontWeight:700, color:'var(--forest)', lineHeight:1.2 }}>
+                CHIEF<br />JIMO EAST<br />LOCATION
+              </div>
+            </div>
+            <div style={{ textAlign:'right', fontSize:12, marginBottom:4 }}>Ref: [Will be assigned on submission]</div>
+            <div style={{ textAlign:'right', fontSize:12, marginBottom:14 }}>{new Date().toLocaleDateString('en-KE', { day:'numeric', month:'long', year:'numeric' })}</div>
+            <div style={{ textAlign:'center', color:'var(--forest)', fontWeight:700, textTransform:'uppercase', textDecoration:'underline', marginBottom:14 }}>
+              {LETTER_TYPES.find(l => l.id === selected)?.label}
+            </div>
+            <p style={{ marginBottom:10 }}>TO WHOM IT MAY CONCERN,</p>
+            <p style={{ fontSize:14, color:'var(--ink-mid)', lineHeight:1.8 }}>
+              {selected === 'id_letter' && `This is to certify that ${user?.name}, a resident of ${form.village} Village, Jimo East Location, is known to this office and their identity is confirmed for official use.`}
+              {selected === 'residence' && `This is to confirm that ${user?.name} is a bona fide resident of ${form.village} Village, Jimo East Location.`}
+              {selected === 'school' && `This is to support the school admission application of ${user?.name}, a resident of ${form.village} Village.`}
+              {selected === 'conduct' && `This is to certify that ${user?.name} of ${form.village} Village is a person of good conduct and character as known to this office.`}
+              {selected === 'intro_id' && `This letter introduces ${user?.name} of ${form.village} Village, applying for a Kenya National Identity Card for the first time.`}
+            </p>
+            <p style={{ marginTop:10, fontSize:14, color:'var(--ink-mid)' }}>
+              This letter is issued for the purpose of: <strong>{form.purpose}</strong>
+            </p>
+            <div style={{ marginTop:24 }}>
+              <div>Issued by:</div>
+              <div style={{ width:180, borderBottom:'1px solid var(--ink)' }} />
+              <div style={{ marginTop:6, fontWeight:700, color:'var(--forest)' }}>Chief John Otieno Otieno</div>
+              <div>Chief, Jimo East Location</div>
+              <div>{new Date().toLocaleDateString('en-KE', { day:'numeric', month:'long', year:'numeric' })}</div>
+              <div style={{ marginTop:8, fontStyle:'italic', color:'var(--ink-faint)', fontSize:12 }}>[Official Stamp & Digital Signature Applied on Approval]</div>
             </div>
           </div>
-          <div className="alert alert-warning">
-            <span>⚠️</span><span>The signed PDF will be available for download after Chief's approval (2–3 working days).</span>
+          <div className="alert alert-warning" style={{ marginTop:12 }}>
+            <span>⚠️</span><span>This is a preview only. The final signed letter will be available for download after Chief's approval (2–3 working days).</span>
           </div>
           <div style={{ display:'flex', gap:10, justifyContent:'flex-end', marginTop:16 }}>
             <button className="btn btn-outline" onClick={() => setStep(2)}>← Edit</button>

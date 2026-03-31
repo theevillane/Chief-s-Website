@@ -47,4 +47,4 @@ yarn-error.log*
 # ── Test output ───────────────────────────────────────────────────────────────
 coverage/
 *.lcov
-seed.js
+backend/utils/seed.js

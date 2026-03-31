@@ -5,6 +5,7 @@ import { useAuth } from './contexts/AuthContext';
 import HomePage           from './pages/HomePage';
 import LoginPage          from './pages/LoginPage';
 import RegisterPage       from './pages/RegisterPage';
+import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import RequestLetterPage  from './pages/RequestLetterPage';
 import ReportDisputePage  from './pages/ReportDisputePage';
 import ReportSecurityPage from './pages/ReportSecurityPage';
@@ -14,6 +15,11 @@ import CitizenDashboard   from './pages/CitizenDashboard';
 import AdminDashboard     from './pages/AdminDashboard';
 import AboutPage          from './pages/AboutPage';
 import VerifyPhonePage    from './pages/VerifyPhonePage';
+import ContactPage        from './pages/ContactPage';
+import HelpFAQPage        from './pages/HelpFAQPage';
+import TermsPage          from './pages/TermsPage';
+import PrivacyPolicyPage  from './pages/PrivacyPolicyPage';
+import AccountSettingsPage from './pages/AccountSettingsPage';
 
 // Shared layout
 import Topbar             from './components/Topbar';
@@ -30,6 +36,10 @@ export default function App() {
   useEffect(() => {
     if (!user) return;
     if (page === 'login') {
+      setPage(isAdmin ? 'admin' : 'dashboard');
+      return;
+    }
+    if (page === 'forgot_password') {
       setPage(isAdmin ? 'admin' : 'dashboard');
       return;
     }
@@ -68,7 +78,8 @@ export default function App() {
       case 'home':            return <HomePage          {...props} />;
       case 'login':           return <LoginPage         {...props} />;
       case 'register':        return <RegisterPage      {...props} />;
-      case 'verify_phone':      return <VerifyPhonePage   {...props} />;
+      case 'forgot_password': return <ForgotPasswordPage {...props} />;
+      case 'verify_phone':    return <VerifyPhonePage   {...props} />;
       case 'request_letter':  return <RequestLetterPage {...props} />;
       case 'report_dispute':  return <ReportDisputePage {...props} />;
       case 'report_security': return <ReportSecurityPage {...props} />;
@@ -77,6 +88,11 @@ export default function App() {
       case 'dashboard':       return user ? <CitizenDashboard {...props} /> : <LoginPage {...props} />;
       case 'admin':           return isAdmin ? <AdminDashboard {...props} /> : <LoginPage {...props} />;
       case 'about':           return <AboutPage          {...props} />;
+      case 'contact':         return <ContactPage        {...props} />;
+      case 'help_faq':        return <HelpFAQPage        {...props} />;
+      case 'terms':           return <TermsPage          {...props} />;
+      case 'privacy':         return <PrivacyPolicyPage  {...props} />;
+      case 'account':         return <AccountSettingsPage {...props} />;
       default:                return <HomePage          {...props} />;
     }
   };
