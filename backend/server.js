@@ -30,6 +30,7 @@ const notificationsRoutes = require('./routes/notifications');
 connectDB();
 
 const app = express();
+app.disable('x-powered-by');
 
 // ─── Trust proxy (needed behind Nginx / load balancer) ───────────────────────
 app.set('trust proxy', 1);
@@ -40,15 +41,23 @@ app.use(helmet({
 }));
 
 // ─── CORS ─────────────────────────────────────────────────────────────────────
-const allowedOrigins = (process.env.ALLOWED_ORIGINS || 'http://localhost:3000')
+const allowedOrigins = (process.env.ALLOWED_ORIGINS || 'http://localhost:5173,http://localhost:4173')
   .split(',')
-  .map(o => o.trim());
+  .map(o => o.trim())
+  .filter(Boolean);
+
+const allowVercelPreviews = String(process.env.ALLOW_VERCEL_PREVIEWS || '').toLowerCase() === 'true';
+const extraOriginRegex = process.env.ALLOWED_ORIGIN_REGEX
+  ? new RegExp(process.env.ALLOWED_ORIGIN_REGEX)
+  : null;
 
 app.use(cors({
   origin: (origin, callback) => {
     // Allow requests with no origin (Postman, mobile apps, curl)
     if (!origin) return callback(null, true);
     if (allowedOrigins.includes(origin)) return callback(null, true);
+    if (allowVercelPreviews && /\.vercel\.app$/i.test(origin)) return callback(null, true);
+    if (extraOriginRegex && extraOriginRegex.test(origin)) return callback(null, true);
     callback(new Error(`CORS policy: origin '${origin}' is not allowed`));
   },
   credentials: true,
@@ -88,7 +97,8 @@ app.use(morgan(morganFormat, {
 }));
 
 // ─── Static Files (uploaded evidence & generated PDFs) ───────────────────────
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+const uploadPath = path.resolve(process.env.UPLOAD_PATH || (process.env.VERCEL === '1' ? '/tmp/uploads' : path.join(__dirname, 'uploads')));
+app.use('/uploads', express.static(uploadPath));
 
 // ─── Swagger API Docs ─────────────────────────────────────────────────────────
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
@@ -129,17 +139,27 @@ app.use((req, res) => {
 // ─── Centralized Error Handler ────────────────────────────────────────────────
 app.use(errorHandler);
 
-// ─── Start Server ─────────────────────────────────────────────────────────────
-const PORT = process.env.PORT || 5000;
-const server = app.listen(PORT, () => {
-  logger.info(`🚀 Jimo East API running on port ${PORT} [${process.env.NODE_ENV}]`);
-  logger.info(`📚 API Docs: http://localhost:${PORT}/api/docs`);
-  logger.info(`💚 Health:   http://localhost:${PORT}/health`);
-});
+let server;
+
+// ─── Start Server (non-serverless runtime) ───────────────────────────────────
+const startServer = () => {
+  const PORT = process.env.PORT || 5000;
+  server = app.listen(PORT, () => {
+    logger.info(`🚀 Jimo East API running on port ${PORT} [${process.env.NODE_ENV}]`);
+    logger.info(`📚 API Docs: http://localhost:${PORT}/api/docs`);
+    logger.info(`💚 Health:   http://localhost:${PORT}/health`);
+  });
+};
+
+// Vercel / serverless environments should export the app without opening a port.
+if (process.env.VERCEL !== '1') {
+  startServer();
+}
 
 // ─── Graceful Shutdown ────────────────────────────────────────────────────────
 const shutdown = (signal) => {
   logger.info(`${signal} received — shutting down gracefully`);
+  if (!server) return process.exit(0);
   server.close(() => {
     logger.info('HTTP server closed');
     process.exit(0);
@@ -151,6 +171,7 @@ process.on('SIGINT',  () => shutdown('SIGINT'));
 // ─── Unhandled Promise Rejections ─────────────────────────────────────────────
 process.on('unhandledRejection', (reason) => {
   logger.error('Unhandled Rejection:', reason);
+  if (!server) return process.exit(1);
   server.close(() => process.exit(1));
 });
 
