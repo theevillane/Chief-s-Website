@@ -361,7 +361,7 @@ Security Implementation
 
 Production Deployment
 
-Backend (Node.js server)
+Backend (Node.js server / Vercel API)
 ```bash
 # Set production env vars
 NODE_ENV=production
@@ -369,6 +369,8 @@ MONGODB_URI=mongodb+srv://...
 JWT_SECRET=<strong-64-char-random>
 AT_USERNAME=jimoeast  # your real Africa's Talking username
 ALLOWED_ORIGINS=https://jimoeast.go.ke
+ALLOW_VERCEL_PREVIEWS=false
+UPLOAD_PATH=/tmp/uploads
 
 # Start with PM2
 npm install -g pm2
@@ -376,11 +378,21 @@ pm2 start backend/server.js --name jimo-api --instances max
 pm2 save
 ```
 
-Frontend (static files)
+Vercel backend deployment:
+```bash
+cd backend
+vercel
+```
+
+Frontend (Vercel static files)
 ```bash
 cd frontend
-npm run build      # outputs to frontend/dist/
-# Deploy dist/ to Netlify, Vercel, Firebase Hosting, or nginx
+vercel
+```
+
+Set this frontend env var in Vercel project settings:
+```env
+VITE_API_BASE_URL=https://<your-backend-domain>
 ```
 
 Nginx reverse proxy (production)
