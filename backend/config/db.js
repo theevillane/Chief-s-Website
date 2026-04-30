@@ -4,10 +4,10 @@ const mongoose = require('mongoose');
 const logger   = require('../utils/logger');
 
 const connectDB = async () => {
-  const uri = process.env.MONGODB_URI;
+  const uri = process.env.MONGODB_URI || process.env.DB_URL;
 
   if (!uri) {
-    logger.error('MONGODB_URI is not defined in environment variables');
+    logger.error('Database URL not set. Define MONGODB_URI (preferred) or DB_URL.');
     process.exit(1);
   }
 
