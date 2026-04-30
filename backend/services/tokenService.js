@@ -10,7 +10,7 @@ const REFRESH_TTL    = process.env.JWT_REFRESH_EXPIRES_IN || '7d';
 
 if (!ACCESS_SECRET || !REFRESH_SECRET) {
   logger.error('JWT secrets are not configured. Set JWT_SECRET and JWT_REFRESH_SECRET in .env');
-  // Do not exit — allow server to start so the error is visible
+  process.exit(1);
 }
 
 /**
