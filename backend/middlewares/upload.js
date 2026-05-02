@@ -5,7 +5,8 @@ const path   = require('path');
 const fs     = require('fs');
 const crypto = require('crypto');
 
-const UPLOAD_PATH   = process.env.UPLOAD_PATH    || './uploads';
+const defaultUploadPath = process.env.VERCEL === '1' ? '/tmp/uploads' : './uploads';
+const UPLOAD_PATH   = path.resolve(process.env.UPLOAD_PATH || defaultUploadPath);
 const MAX_MB        = parseInt(process.env.MAX_FILE_SIZE_MB) || 5;
 const MAX_BYTES     = MAX_MB * 1024 * 1024;
 const ALLOWED_TYPES = (process.env.ALLOWED_FILE_TYPES || 'image/jpeg,image/png,image/webp,application/pdf')
